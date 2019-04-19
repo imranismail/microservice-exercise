@@ -12,7 +12,14 @@ message Payment {
     success = 4;
   }
 
-  uint32 id = 1;
-  int32 amount = 2;
+  message PaymentOption {
+    string provider = 1;
+    string ref = 2;
+    string challenge = 3;
+  }
+
+  string id = 1;
   Status status = 3;
+  int32 amount = 2;
+  PaymentOption payment_option = 4;
 }
