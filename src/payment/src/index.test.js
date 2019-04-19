@@ -15,10 +15,10 @@ test.after("stop server", t => {
   t.context.server.forceShutdown();
 });
 
-function setupPayment() {
+function buildPayment() {
   return {
     amount: 3000,
-    paymentOption: {
+    option: {
       provider: "visa",
       challenge: "123",
       ref: "4111111111111111"
@@ -26,23 +26,23 @@ function setupPayment() {
   };
 }
 
-test("service:create with valid payment", async t => {
-  const newPayment = setupPayment();
+test("create valid payment", async t => {
+  const payment = buildPayment();
 
-  const createdPayment = await t.context.client.create(newPayment);
+  const createdPayment = await t.context.client.create(payment);
 
   t.truthy(createdPayment.id);
   t.truthy(createdPayment.status);
 });
 
-test("service:create with invalid provider", async t => {
-  const newPayment = setupPayment();
+test("create payment with invalid provider", async t => {
+  const payment = buildPayment();
 
-  newPayment.paymentOption.provider = "master";
+  payment.option.provider = "master";
 
   await t.throwsAsync(
     async () => {
-      await t.context.client.create(newPayment);
+      await t.context.client.create(payment);
     },
     {
       instanceOf: Error,
@@ -51,14 +51,14 @@ test("service:create with invalid provider", async t => {
   );
 });
 
-test("service:create with invalid challenge", async t => {
-  const newPayment = setupPayment();
+test("create payment with invalid challenge", async t => {
+  const payment = buildPayment();
 
-  newPayment.paymentOption.challenge = "124";
+  payment.option.challenge = "124";
 
   await t.throwsAsync(
     async () => {
-      await t.context.client.create(newPayment);
+      await t.context.client.create(payment);
     },
     {
       instanceOf: Error,
@@ -67,10 +67,10 @@ test("service:create with invalid challenge", async t => {
   );
 });
 
-test("service:list", async t => {
-  const newPayment = setupPayment();
+test("list payments", async t => {
+  const payment = buildPayment();
 
-  await t.context.client.create(newPayment);
+  await t.context.client.create(payment);
 
   const list = await t.context.client.list({});
 

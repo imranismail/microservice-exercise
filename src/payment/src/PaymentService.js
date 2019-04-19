@@ -13,7 +13,7 @@ class PaymentService {
   }
 
   create(payment) {
-    this._assertValidPaymentOption(payment.paymentOption);
+    this._assertValidOption(payment.option);
 
     payment.id = uuid();
     payment.status = sample(PAYMENT_STATUS);
@@ -29,14 +29,11 @@ class PaymentService {
     };
   }
 
-  _assertValidPaymentOption(paymentOption) {
-    if (!paymentOption) throw new Error("payment option must be specified");
-    if (!PAYMENT_PROVIDERS.includes(paymentOption.provider))
-      throw new Error(`invalid payment provider: ${paymentOption.provider}`);
-    if (
-      paymentOption.ref === "4111111111111111" &&
-      paymentOption.challenge !== "123"
-    )
+  _assertValidOption(option) {
+    if (!option) throw new Error("payment option must be specified");
+    if (!PAYMENT_PROVIDERS.includes(option.provider))
+      throw new Error(`invalid payment provider: ${option.provider}`);
+    if (option.ref === "4111111111111111" && option.challenge !== "123")
       throw new Error("invalid challenge code");
   }
 }

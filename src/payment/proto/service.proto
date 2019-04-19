@@ -24,7 +24,7 @@ message Payment {
   string id = 1;
   Status status = 2;
   int32 amount = 3;
-  PaymentOption payment_option = 4;
+  PaymentOption option = 4;
 }
 
 message PaymentList {
