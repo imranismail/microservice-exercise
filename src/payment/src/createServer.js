@@ -1,5 +1,5 @@
 const grpc = require("grpc");
-const { requireProto, implementedBy } = require("helpers");
+const { requireProto, implementWith } = require("helpers");
 const PaymentService = require("./PaymentService");
 const proto = requireProto("../proto/service.proto");
 
@@ -9,7 +9,7 @@ function createServer(address) {
 
   server.addService(
     proto.PaymentService.service,
-    implementedBy({
+    implementWith({
       create: impl.create
     })
   );

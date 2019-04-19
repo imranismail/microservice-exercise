@@ -1,5 +1,5 @@
 const grpc = require("grpc");
-const { requireProto, implementedBy } = require("helpers");
+const { requireProto, implementWith } = require("helpers");
 const proto = requireProto("../proto/service.proto");
 
 class OrderService {
@@ -20,7 +20,7 @@ function createServer(address) {
 
   server.addService(
     proto.OrderService.service,
-    implementedBy({
+    implementWith({
       create: impl.create,
       cancel: impl.cancel,
       get: impl.get

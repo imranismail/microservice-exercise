@@ -1,4 +1,4 @@
 module.exports = {
-  implementedBy: require("./implementedBy"),
+  implementWith: require("./implementWith"),
   requireProto: require("./requireProto")
 };

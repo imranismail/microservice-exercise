@@ -1,4 +1,4 @@
-function implementedBy(map) {
+function implementWith(map) {
   const implementation = {};
 
   for (let key in map) {
@@ -15,4 +15,4 @@ function implementedBy(map) {
   return implementation;
 }
 
-module.exports = implementedBy;
+module.exports = implementWith;
