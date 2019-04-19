@@ -1,13 +1,10 @@
 const grpc = require("grpc");
 const util = require("util");
 const { requireProto } = require("helpers");
-const proto = requireProto("../proto/service.proto");
+const { PaymentService } = requireProto("../proto/service.proto");
 
 function createClient(address) {
-  const client = new proto.PaymentService(
-    address,
-    grpc.credentials.createInsecure()
-  );
+  const client = new PaymentService(address, grpc.credentials.createInsecure());
 
   client.create = util.promisify(client.create);
 
