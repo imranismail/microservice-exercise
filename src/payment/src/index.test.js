@@ -15,8 +15,8 @@ test.after("stop server", t => {
   t.context.server.forceShutdown();
 });
 
-test("foo", async t => {
-  const newPayment = {
+function setupPayment() {
+  return {
     amount: 3000,
     paymentOption: {
       provider: "visa",
@@ -24,9 +24,45 @@ test("foo", async t => {
       ref: "4111111111111111"
     }
   };
+}
+
+test("service:create with valid payment", async t => {
+  const newPayment = setupPayment();
 
   const createdPayment = await t.context.client.create(newPayment);
 
   t.truthy(createdPayment.id);
   t.truthy(createdPayment.status);
+});
+
+test("service:create with invalid provider", async t => {
+  const newPayment = setupPayment();
+
+  newPayment.paymentOption.provider = "master";
+
+  await t.throwsAsync(
+    async () => {
+      await t.context.client.create(newPayment);
+    },
+    {
+      instanceOf: Error,
+      message: /invalid payment provider/
+    }
+  );
+});
+
+test("service:create with invalid challenge", async t => {
+  const newPayment = setupPayment();
+
+  newPayment.paymentOption.challenge = "124";
+
+  await t.throwsAsync(
+    async () => {
+      await t.context.client.create(newPayment);
+    },
+    {
+      instanceOf: Error,
+      message: /invalid challenge code/
+    }
+  );
 });
