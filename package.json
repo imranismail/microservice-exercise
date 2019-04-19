@@ -5,8 +5,5 @@
     "src/payment",
     "src/gateway",
     "src/helpers"
-  ],
-  "dependencies": {
-    "yarn": "^1.15.2"
-  }
+  ]
 }
