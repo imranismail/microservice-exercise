@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-service Payment {
+service PaymentService {
   rpc Create(Payment) returns (Payment) {}
 }
 
@@ -13,6 +13,6 @@ message Payment {
   }
 
   uint32 id = 1;
-  double amount = 2;
+  int32 amount = 2;
   Status status = 3;
 }
