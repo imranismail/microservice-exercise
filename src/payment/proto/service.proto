@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+service Payment {
+  rpc Create(Payment) returns (Payment) {}
+}
+
+message Payment {
+  enum Status {
+    pending = 1;
+    void = 2;
+    processing = 3;
+    success = 4;
+  }
+
+  uint32 id = 1;
+  double amount = 2;
+  Status status = 3;
+}

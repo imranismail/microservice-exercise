@@ -1,0 +1,4 @@
+{
+  "private": true,
+  "workspaces": ["src/order", "src/payment", "src/gateway"]
+}

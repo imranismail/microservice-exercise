@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+service Order {
+  rpc Create(Order) returns (Order) {}
+  rpc Cancel(Order) returns (Order) {}
+  rpc Get(Order.id) returns (Order) {}
+}
+
+message Order {
+  enum Status {
+    created = 1;
+    confirmed = 2;
+    cancelled = 3;
+    delivered = 4;
+  }
+
+  message Item {
+    string title = 1;
+    string body = 2;
+    double amount = 3;
+  }
+
+  uint32 id = 1;
+  Status status = 2;
+  repeated Item items = 3;
+}
