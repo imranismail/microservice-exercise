@@ -1,4 +1,5 @@
 module.exports = {
   implementWith: require("./implementWith"),
-  requireProto: require("./requireProto")
+  requireProto: require("./requireProto"),
+  promisifyClient: require("./promisifyClient")
 };

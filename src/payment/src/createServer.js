@@ -5,12 +5,12 @@ const proto = requireProto("../proto/service.proto");
 
 function createServer(address) {
   const server = new grpc.Server();
-  const impl = new PaymentService();
+  const service = new PaymentService();
 
   server.addService(
     proto.PaymentService.service,
     implementWith({
-      create: impl.create
+      create: service.create
     })
   );
 
