@@ -67,6 +67,17 @@ test("create payment with invalid challenge", async t => {
   );
 });
 
+test("get payment", async t => {
+  const payment = buildPayment();
+
+  const createdPayment = await t.context.client.create(payment);
+  const retrievedPayment = await t.context.client.get({
+    id: createdPayment.id
+  });
+
+  t.is(createdPayment.id, retrievedPayment.id);
+});
+
 test("list payments", async t => {
   const payment = buildPayment();
 

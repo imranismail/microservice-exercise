@@ -10,6 +10,7 @@ class PaymentService {
     this.payments = new Map();
     this.create = this.create.bind(this);
     this.list = this.list.bind(this);
+    this.get = this.get.bind(this);
   }
 
   create(payment) {
@@ -27,6 +28,10 @@ class PaymentService {
     return {
       payments: [...this.payments.values()]
     };
+  }
+
+  get(payment) {
+    return this.payments.get(payment.id);
   }
 
   _assertValidOption(option) {

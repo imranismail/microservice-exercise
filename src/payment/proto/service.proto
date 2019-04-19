@@ -4,6 +4,7 @@ import "google/protobuf/empty.proto";
 
 service PaymentService {
   rpc Create(Payment) returns (Payment) {}
+  rpc Get(Payment) returns (Payment) {}
   rpc List(google.protobuf.Empty) returns (PaymentList) {}
 }
 
