@@ -8,19 +8,19 @@ service Order {
 
 message Order {
   enum Status {
-    created = 1;
-    confirmed = 2;
-    cancelled = 3;
-    delivered = 4;
+    created = 0;
+    confirmed = 1;
+    cancelled = 2;
+    delivered = 3;
   }
 
   message Item {
-    string title = 1;
-    string body = 2;
-    double amount = 3;
+    string title = 0;
+    string body = 1;
+    double amount = 2;
   }
 
-  uint32 id = 1;
-  Status status = 2;
-  repeated Item items = 3;
+  uint32 id = 0;
+  Status status = 1;
+  repeated Item items = 2;
 }
