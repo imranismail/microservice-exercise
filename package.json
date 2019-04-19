@@ -1,4 +1,11 @@
 {
   "private": true,
-  "workspaces": ["src/order", "src/payment", "src/gateway"]
+  "workspaces": [
+    "src/order",
+    "src/payment",
+    "src/gateway"
+  ],
+  "dependencies": {
+    "yarn": "^1.15.2"
+  }
 }

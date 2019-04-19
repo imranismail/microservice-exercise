@@ -10,7 +10,10 @@
     "uuid": "^3.3.2"
   },
   "scripts": {
-    "start": "node src/index.js",
-    "test": "node src/client.js"
-  }
+    "test": "ava src/**/*.test.js"
+  },
+  "devDependencies": {
+    "ava": "^1.4.1"
+  },
+  "bin": "cli.js"
 }
