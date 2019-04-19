@@ -4,24 +4,29 @@ import "google/protobuf/empty.proto";
 
 service PaymentService {
   rpc Create(Payment) returns (Payment) {}
+  rpc List(google.protobuf.Empty) returns (PaymentList) {}
 }
 
 message Payment {
   enum Status {
-    pending = 0;
-    void = 1;
-    processing = 2;
-    success = 3;
+    pending = 1;
+    void = 2;
+    processing = 3;
+    success = 4;
   }
 
   message PaymentOption {
-    string provider = 0;
-    string ref = 1;
-    string challenge = 2;
+    string provider = 1;
+    string ref = 2;
+    string challenge = 3;
   }
 
-  string id = 0;
-  Status status = 1;
-  int32 amount = 2;
-  PaymentOption payment_option = 3;
+  string id = 1;
+  Status status = 2;
+  int32 amount = 3;
+  PaymentOption payment_option = 4;
+}
+
+message PaymentList {
+  repeated Payment payments = 1;
 }

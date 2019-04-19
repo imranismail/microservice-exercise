@@ -9,6 +9,21 @@ function promisifyClient(client) {
       continue;
     }
 
+    if (fn.responseStream && fn.requestStream) {
+      // bi-directional stream
+      continue;
+    }
+
+    if (fn.responseStream) {
+      // response stream
+      continue;
+    }
+
+    if (fn.requestStream) {
+      // request stream
+      continue;
+    }
+
     client[key] = util.promisify(fn);
   }
 

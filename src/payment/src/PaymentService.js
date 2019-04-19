@@ -9,6 +9,7 @@ class PaymentService {
   constructor() {
     this.payments = new Map();
     this.create = this.create.bind(this);
+    this.list = this.list.bind(this);
   }
 
   create(payment) {
@@ -20,6 +21,12 @@ class PaymentService {
     this.payments.set(payment.id, payment);
 
     return payment;
+  }
+
+  list() {
+    return {
+      payments: [...this.payments.values()]
+    };
   }
 
   _assertValidPaymentOption(paymentOption) {

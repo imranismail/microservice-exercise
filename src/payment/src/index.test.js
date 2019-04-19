@@ -66,3 +66,13 @@ test("service:create with invalid challenge", async t => {
     }
   );
 });
+
+test("service:list", async t => {
+  const newPayment = setupPayment();
+
+  await t.context.client.create(newPayment);
+
+  const list = await t.context.client.list({});
+
+  t.assert(list.payments.length > 0);
+});
