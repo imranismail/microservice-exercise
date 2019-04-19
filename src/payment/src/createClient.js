@@ -1,6 +1,7 @@
 const grpc = require("grpc");
 const util = require("util");
-const proto = require("./proto");
+const { requireProto } = require("helpers");
+const proto = requireProto("../proto/service.proto");
 
 function createClient(address) {
   const client = new proto.PaymentService(

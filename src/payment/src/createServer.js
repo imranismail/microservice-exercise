@@ -1,21 +1,18 @@
 const grpc = require("grpc");
+const { requireProto, implementedBy } = require("helpers");
 const PaymentService = require("./PaymentService");
-const proto = require("./proto");
+const proto = requireProto("../proto/service.proto");
 
 function createServer(address) {
   const server = new grpc.Server();
   const impl = new PaymentService();
 
-  server.addService(proto.PaymentService.service, {
-    create: async (call, callback) => {
-      try {
-        const payment = await impl.create(call.request);
-        callback(null, payment);
-      } catch (err) {
-        callback(err, null);
-      }
-    }
-  });
+  server.addService(
+    proto.PaymentService.service,
+    implementedBy({
+      create: impl.create
+    })
+  );
 
   server.bind(address, grpc.ServerCredentials.createInsecure());
 

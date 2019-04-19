@@ -7,7 +7,8 @@ const PAYMENT_STATUS = ["pending", "void", "processing", "success"];
 
 class PaymentService {
   constructor() {
-    this.payments = [];
+    this.payments = new Map();
+    this.create = this.create.bind(this);
   }
 
   create(payment) {
@@ -16,7 +17,7 @@ class PaymentService {
     payment.id = uuid();
     payment.status = sample(PAYMENT_STATUS);
 
-    this.payments.push(payment);
+    this.payments.set(payment.id, payment);
 
     return payment;
   }
