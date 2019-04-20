@@ -15,7 +15,7 @@ message Payment {
     confirmed = 3;
   }
 
-  message PaymentOption {
+  message Option {
     string provider = 1;
     string identity = 2;
     string challenge = 3;
@@ -24,7 +24,7 @@ message Payment {
   string id = 1;
   Status status = 2;
   int32 amount = 3;
-  PaymentOption option = 4;
+  Option option = 4;
 }
 
 message PaymentList {

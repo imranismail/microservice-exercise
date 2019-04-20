@@ -40,11 +40,22 @@ function buildOrder() {
   };
 }
 
-test("create valid order", async t => {
+test("create and pay order", async t => {
   const order = buildOrder();
 
   const createdOrder = await t.context.client.create(order);
 
   t.truthy(createdOrder.id);
-  t.truthy(createdOrder.status);
+  t.is(createdOrder.status, "created");
+
+  const paidOrder = await t.context.client.pay({
+    orderId: createdOrder.id,
+    option: {
+      provider: "visa",
+      challenge: "123",
+      identity: "4111111111111111"
+    }
+  });
+
+  t.assert(["confirmed", "void"].includes(paidOrder.status));
 });

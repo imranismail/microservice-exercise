@@ -12,67 +12,71 @@ class OrderService {
     this.create = this.create.bind(this);
     this.cancel = this.cancel.bind(this);
     this.get = this.get.bind(this);
+    this.pay = this.pay.bind(this);
   }
 
-  async create(order) {
+  create(order) {
     order.id = uuid();
     order.status = "created";
-
-    const payment = await this.paymentService.create({
-      amount: this._calculateTotalAmount(order),
-      option: {
-        provider: "visa",
-        challenge: "123",
-        identity: "4111111111111111"
-      }
-    });
-
-    switch (payment.status) {
-      case "declined":
-        order.status = "cancelled";
-        break;
-      case "confirmed":
-        order.status = "confirmed";
-        break;
-      default:
-        throw new Error(`unknown state: ${payment.status}`);
-    }
 
     this.orders.set(order.id, order);
 
     return order;
   }
 
+  async pay(orderPayment) {
+    this._assertOrderExist(orderPayment.orderId);
+
+    const order = this.orders.get(orderPayment.orderId);
+
+    const totalAmount = this._calculateTotalAmount(order.items);
+
+    const payment = await this.paymentService.create({
+      amount: totalAmount,
+      option: orderPayment.option
+    });
+
+    switch (payment.status) {
+      case "declined":
+        order.status = "void";
+        break;
+      case "confirmed":
+        order.status = "confirmed";
+        break;
+    }
+
+    return order;
+  }
+
   cancel(order) {
-    this._assertOrderExist(order);
-    this._assertCancellable(order);
+    this._assertOrderExist(order.id);
 
     order = this.orders.get(order.id);
+
+    this._assertCancellable(order.status);
+
     order.status = "cancelled";
 
     return order;
   }
 
   get(order) {
-    this._assertOrderExist(order);
+    this._assertOrderExist(order.id);
     return this.orders.get(order.id);
   }
 
-  _assertOrderExist(order) {
-    if (!this.orders.has(order.id))
-      throw new Error(`couldn't find order with ID: ${order.id}`);
+  _assertOrderExist(id) {
+    if (!this.orders.has(id))
+      throw new Error(`couldn't find order with ID: ${id}`);
   }
 
-  _assertCancellable(order) {
-    const order = this.orders.get(order.id);
-    const status = order.status;
-
+  _assertCancellable(status) {
     if (status !== "success")
       throw new Error(`non cancellable order with status: ${status}`);
   }
 
-  _calculateTotalAmount(order) {
-    return order.items.reduce((prevState, i) => prevState + i.amount, 0);
+  _calculateTotalAmount(items) {
+    return items.reduce((prevState, i) => prevState + i.amount, 0);
   }
 }
 

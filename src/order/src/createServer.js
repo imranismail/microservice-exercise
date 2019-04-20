@@ -12,7 +12,8 @@ function createServer(address, { paymentService }) {
   server.addService(proto.OrderService.service, {
     create: unary(service.create),
     cancel: unary(service.cancel),
-    get: unary(service.get)
+    get: unary(service.get),
+    pay: unary(service.pay)
   });
 
   server.bind(address, grpc.ServerCredentials.createInsecure());

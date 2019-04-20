@@ -4,6 +4,7 @@ service OrderService {
   rpc Create(Order) returns (Order) {}
   rpc Cancel(Order) returns (Order) {}
   rpc Get(Order) returns (Order) {}
+  rpc Pay(Order.Payment) returns (Order) {}
 }
 
 message Order {
@@ -12,6 +13,7 @@ message Order {
     confirmed = 2;
     cancelled = 3;
     delivered = 4;
+    void = 5;
   }
 
   message Item {
@@ -19,6 +21,17 @@ message Order {
     string description = 2;
     string identity = 3;
     int32 amount = 4;
+  }
+
+  message Payment {
+    message Option {
+      string provider = 1;
+      string identity = 2;
+      string challenge = 3;
+    }
+
+    string order_id = 1;
+    Option option = 2;
   }
 
   string id = 1;
