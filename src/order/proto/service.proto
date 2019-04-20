@@ -19,14 +19,14 @@ message Order {
   message Item {
     string title = 1;
     string description = 2;
-    string identity = 3;
+    string id = 3;
     int32 amount = 4;
   }
 
   message Payment {
     message Option {
       string provider = 1;
-      string identity = 2;
+      string id = 2;
       string challenge = 3;
     }
 

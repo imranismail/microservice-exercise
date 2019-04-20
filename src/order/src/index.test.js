@@ -33,14 +33,14 @@ function buildOrder() {
       {
         title: "Playstation 4",
         description: "Piano Black (120GB)",
-        identity: "12345",
+        id: "12345",
         amount: 90000
       }
     ]
   };
 }
 
-test("create and wait for 5 secs", async t => {
+test("create and wait for delivery job", async t => {
   const order = buildOrder();
 
   const createdOrder = await t.context.client.create(order);
@@ -48,14 +48,14 @@ test("create and wait for 5 secs", async t => {
   t.truthy(createdOrder.id);
   t.is(createdOrder.status, "created");
 
-  await new Promise(resolve => setTimeout(resolve, 5000));
+  await new Promise(resolve => setTimeout(resolve, 10000));
 
   const voidOrder = await t.context.client.get(createdOrder);
 
   t.is(voidOrder.status, "void");
 });
 
-test("create, pay and wait for 5 secs", async t => {
+test("create, pay and wait for delivery job", async t => {
   const order = buildOrder();
 
   const createdOrder = await t.context.client.create(order);
@@ -64,24 +64,24 @@ test("create, pay and wait for 5 secs", async t => {
   t.is(createdOrder.status, "created");
 
   const paidOrder = await t.context.client.pay({
-    orderId: createdOrder.id,
+    order_id: createdOrder.id,
     option: {
       provider: "visa",
       challenge: "123",
-      identity: "4111111111111111"
+      id: "4111111111111111"
     }
   });
 
   t.is(paidOrder.status, "confirmed");
 
-  await new Promise(resolve => setTimeout(resolve, 5000));
+  await new Promise(resolve => setTimeout(resolve, 10000));
 
   const deliveredOrder = await t.context.client.get(createdOrder);
 
   t.is(deliveredOrder.status, "delivered");
 });
 
-test("create, pay (failure) and wait for 5 secs", async t => {
+test("create, pay (failure) and wait for delivery job", async t => {
   const order = buildOrder();
 
   const createdOrder = await t.context.client.create(order);
@@ -90,17 +90,17 @@ test("create, pay (failure) and wait for 5 secs", async t => {
   t.is(createdOrder.status, "created");
 
   const paidOrder = await t.context.client.pay({
-    orderId: createdOrder.id,
+    order_id: createdOrder.id,
     option: {
       provider: "visa",
       challenge: "124",
-      identity: "4111111111111111"
+      id: "4111111111111111"
     }
   });
 
   t.is(paidOrder.status, "void");
 
-  await new Promise(resolve => setTimeout(resolve, 5000));
+  await new Promise(resolve => setTimeout(resolve, 10000));
 
   const deliveredOrder = await t.context.client.get(createdOrder);
 
@@ -116,11 +116,11 @@ test("create, pay then cancel", async t => {
   t.is(createdOrder.status, "created");
 
   const paidOrder = await t.context.client.pay({
-    orderId: createdOrder.id,
+    order_id: createdOrder.id,
     option: {
       provider: "visa",
       challenge: "123",
-      identity: "4111111111111111"
+      id: "4111111111111111"
     }
   });
 

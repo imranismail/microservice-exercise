@@ -1,5 +1,4 @@
 const uuid = require("uuid/v4");
-const sample = require("lodash/sample");
 
 class PaymentService {
   constructor() {
@@ -15,7 +14,7 @@ class PaymentService {
     payment.id = uuid();
 
     payment.status =
-      payment.option.identity === "4111111111111111" &&
+      payment.option.id === "4111111111111111" &&
       payment.option.challenge === "123"
         ? "confirmed"
         : "declined";

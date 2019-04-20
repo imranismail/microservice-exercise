@@ -5,7 +5,6 @@
   "license": "MIT",
   "dependencies": {
     "grpc": "^1.20.0",
-    "lodash": "^4.17.11",
     "uuid": "^3.3.2",
     "winston": "^3.2.1"
   },

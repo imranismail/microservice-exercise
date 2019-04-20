@@ -15,7 +15,7 @@ function requireProto(protoPath) {
   if (cache.has(resolvedProtoPath)) return cache.get(resolvedProtoPath);
 
   const pkgDefs = proto.loadSync(resolvedProtoPath, {
-    keepCase: false,
+    keepCase: true,
     longs: String,
     enums: String,
     defaults: false,

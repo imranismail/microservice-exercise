@@ -20,7 +20,7 @@ function buildPayment() {
     option: {
       provider: "visa",
       challenge: "123",
-      identity: "4111111111111111"
+      id: "4111111111111111"
     }
   };
 }

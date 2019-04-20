@@ -18,7 +18,7 @@ class OrderService {
   create(order) {
     order.id = uuid();
     order.status = "created";
-    order.deliveryJob = setTimeout(() => this._deliverOrder(order.id), 5000);
+    order.delivery_job = setTimeout(() => this._deliverOrder(order.id), 10000);
 
     this.orders.set(order.id, order);
 
@@ -26,9 +26,11 @@ class OrderService {
   }
 
   async pay(orderPayment) {
-    this._assertOrderExist(orderPayment.orderId);
+    this._assertExist(orderPayment.order_id);
 
-    const order = this.orders.get(orderPayment.orderId);
+    const order = this.orders.get(orderPayment.order_id);
+
+    this._assertPayable(order.status);
 
     const totalAmount = this._calculateTotalAmount(order.items);
 
@@ -40,30 +42,28 @@ class OrderService {
     switch (payment.status) {
       case "declined":
         order.status = "void";
-        break;
+        throw new Error("payment option declined");
       case "confirmed":
         order.status = "confirmed";
-        break;
+        return order;
     }
-
-    return order;
   }
 
   cancel(order) {
-    this._assertOrderExist(order.id);
+    this._assertExist(order.id);
 
     order = this.orders.get(order.id);
 
     this._assertCancellable(order.status);
 
-    order.deliveryJob = clearTimeout(order.deliveryJob);
+    order.delivery_job = clearTimeout(order.delivery_job);
     order.status = "cancelled";
 
     return order;
   }
 
   get(order) {
-    this._assertOrderExist(order.id);
+    this._assertExist(order.id);
     return this.orders.get(order.id);
   }
 
@@ -81,7 +81,7 @@ class OrderService {
     }
   }
 
-  _assertOrderExist(id) {
+  _assertExist(id) {
     if (!this.orders.has(id))
       throw new Error(`couldn't find order with ID: ${id}`);
   }
@@ -89,6 +89,11 @@ class OrderService {
   _assertCancellable(status) {
     if (status !== "confirmed")
       throw new Error(`non cancellable order with status: ${status}`);
+  }
+
+  _assertPayable(status) {
+    if (status !== "created")
+      throw new Error(`non payable order with status: ${status}`);
   }
 
   _calculateTotalAmount(items) {
