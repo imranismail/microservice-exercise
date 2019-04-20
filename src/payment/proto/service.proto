@@ -11,14 +11,13 @@ service PaymentService {
 message Payment {
   enum Status {
     pending = 1;
-    void = 2;
-    processing = 3;
-    success = 4;
+    declined = 2;
+    confirmed = 3;
   }
 
   message PaymentOption {
     string provider = 1;
-    string ref = 2;
+    string identity = 2;
     string challenge = 3;
   }
 

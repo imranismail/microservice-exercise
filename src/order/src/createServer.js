@@ -3,16 +3,16 @@ const { requireProto, unary } = require("helper");
 const OrderService = require("./OrderService");
 const proto = requireProto("../proto/service.proto");
 
-function createServer({ address, paymentService }) {
+function createServer(address, { paymentService }) {
   const server = new grpc.Server();
-  const impl = new OrderService({
+  const service = new OrderService({
     paymentService
   });
 
   server.addService(proto.OrderService.service, {
-    create: unary(impl.create),
-    cancel: unary(impl.cancel),
-    get: unary(impl.get)
+    create: unary(service.create),
+    cancel: unary(service.cancel),
+    get: unary(service.get)
   });
 
   server.bind(address, grpc.ServerCredentials.createInsecure());

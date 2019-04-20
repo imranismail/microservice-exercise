@@ -1,9 +1,12 @@
 const uuid = require("uuid/v4");
 const sample = require("lodash/sample");
 
-const PAYMENT_PROVIDERS = ["visa"];
+const PROVIDERS = ["visa"];
 
-const PAYMENT_STATUS = ["pending", "void", "processing", "success"];
+const STATUSES = {
+  pending: ["declined", "confirmed"],
+  "*": ["pending", "declined", "confirmed"]
+};
 
 class PaymentService {
   constructor() {
@@ -17,7 +20,8 @@ class PaymentService {
     this._assertValidOption(payment.option);
 
     payment.id = uuid();
-    payment.status = sample(PAYMENT_STATUS);
+    payment.status = "pending";
+    payment.status = sample(STATUSES[payment.status]);
 
     this.payments.set(payment.id, payment);
 
@@ -31,14 +35,20 @@ class PaymentService {
   }
 
   get(payment) {
+    this._assertPaymentExist(payment);
     return this.payments.get(payment.id);
+  }
+
+  _assertPaymentExist(payment) {
+    if (!this.payments.has(payment.id))
+      throw new Error(`couldn't find payment with ID: ${payment.id}`);
   }
 
   _assertValidOption(option) {
     if (!option) throw new Error("payment option must be specified");
-    if (!PAYMENT_PROVIDERS.includes(option.provider))
+    if (!PROVIDERS.includes(option.provider))
       throw new Error(`invalid payment provider: ${option.provider}`);
-    if (option.ref === "4111111111111111" && option.challenge !== "123")
+    if (option.identity === "4111111111111111" && option.challenge !== "123")
       throw new Error("invalid challenge code");
   }
 }

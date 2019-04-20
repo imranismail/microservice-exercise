@@ -16,11 +16,12 @@ message Order {
 
   message Item {
     string title = 1;
-    string body = 2;
-    double amount = 3;
+    string description = 2;
+    string identity = 3;
+    int32 amount = 4;
   }
 
-  uint32 id = 1;
+  string id = 1;
   Status status = 2;
   repeated Item items = 3;
 }

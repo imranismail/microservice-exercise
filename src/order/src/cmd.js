@@ -3,7 +3,7 @@
 const program = require("commander");
 const pkg = require("../package.json");
 const { createServer, logger } = require("./");
-const { createClient: createPaymentService } = require("payment");
+const { createClient: createPaymentClient } = require("payment");
 
 program.version(pkg.version);
 
@@ -12,10 +12,9 @@ program
   .description("starts the order service")
   .option("-p, --payment-svc-addr [address]", "payment service address")
   .action((address, { paymentSvcAddr: paymentServiceAddress }) => {
-    const paymentService = createPaymentService(paymentServiceAddress);
+    const paymentService = createPaymentClient(paymentServiceAddress);
 
-    const server = createServer({
-      address,
+    const server = createServer(address, {
       paymentService
     });
 
