@@ -18,8 +18,6 @@ program
       paymentService
     });
 
-    logger.info(`using payment service on address ${paymentServiceAddress}`);
-
     logger.info(`starting order service on address ${address}`);
 
     server.start();
