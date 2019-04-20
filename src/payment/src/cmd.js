@@ -2,7 +2,7 @@
 
 const program = require("commander");
 const pkg = require("../package.json");
-const { createServer } = require("./");
+const { createServer, logger } = require("./");
 
 program.version(pkg.version);
 
@@ -11,7 +11,9 @@ program
   .description("starts the payment service")
   .action(address => {
     const server = createServer(address);
-    console.info(`starting payment service on address ${address}`);
+
+    logger.info(`starting payment service on address ${address}`);
+
     server.start();
   });
 
