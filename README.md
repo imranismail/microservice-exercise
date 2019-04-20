@@ -15,3 +15,9 @@ This is a monorepo consisting of multiple services built using technologies like
 $ yarn install
 $ yarn start
 ```
+
+## Testing
+
+```sh
+$ yarn test
+```
