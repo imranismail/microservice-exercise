@@ -1,5 +1,5 @@
 const grpc = require("grpc");
-const { requireProto, unary } = require("helpers");
+const { requireProto, unary } = require("helper");
 const PaymentService = require("./PaymentService");
 const proto = requireProto("../proto/service.proto");
 

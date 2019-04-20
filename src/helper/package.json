@@ -1,9 +1,10 @@
 {
-  "name": "helpers",
+  "name": "helper",
   "version": "1.0.0",
   "main": "src/index.js",
   "license": "MIT",
   "dependencies": {
+    "@grpc/proto-loader": "^0.5.0",
     "callsite": "^1.0.0",
     "lodash": "^4.17.11"
   }

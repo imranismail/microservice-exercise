@@ -1,9 +1,9 @@
 syntax = "proto3";
 
-service Order {
+service OrderService {
   rpc Create(Order) returns (Order) {}
   rpc Cancel(Order) returns (Order) {}
-  rpc Get(Order.id) returns (Order) {}
+  rpc Get(Order) returns (Order) {}
 }
 
 message Order {

@@ -4,6 +4,6 @@
     "src/order",
     "src/payment",
     "src/gateway",
-    "src/helpers"
+    "src/helper"
   ]
 }

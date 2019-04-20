@@ -1,6 +1,5 @@
 const test = require("ava");
-const createServer = require("./createServer");
-const createClient = require("./createClient");
+const { createServer, createClient } = require("./");
 
 test.serial.before("start server", t => {
   t.context.server = createServer("0.0.0.0:1337");
