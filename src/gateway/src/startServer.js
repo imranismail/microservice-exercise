@@ -69,7 +69,7 @@ function startServer(address, { orderServiceAddress }) {
 
   const [host, port] = address.split(":");
 
-  app.listen(port, host, () => console.log(`gateway running on ${address}`));
+  app.listen(port, host, () => logger.info(`gateway running on ${address}`));
 }
 
 module.exports = startServer;
