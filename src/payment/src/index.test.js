@@ -3,6 +3,7 @@ const { createServer, createClient } = require("./");
 
 test.serial.before("start server", t => {
   t.context.server = createServer("0.0.0.0:1337");
+
   t.context.server.start();
 });
 
@@ -31,6 +32,7 @@ test("create valid payment", async t => {
   const createdPayment = await t.context.client.create(payment);
 
   t.truthy(createdPayment.id);
+
   t.truthy(createdPayment.status);
 });
 
@@ -64,6 +66,7 @@ test("get payment", async t => {
   const payment = buildPayment();
 
   const createdPayment = await t.context.client.create(payment);
+
   const retrievedPayment = await t.context.client.get({
     id: createdPayment.id
   });

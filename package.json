@@ -10,6 +10,7 @@
     "concurrently": "^4.1.0"
   },
   "scripts": {
-    "start": "concurrently \"yarn payment server 0.0.0.0:3000\" \"yarn order server -p 0.0.0.0:3000 0.0.0.0:4000\" \"yarn gateway server -o 0.0.0.0:4000 0.0.0.0:5000\""
+    "start": "concurrently \"yarn payment server 0.0.0.0:3000\" \"yarn order server -p 0.0.0.0:3000 0.0.0.0:4000\" \"yarn gateway server -o 0.0.0.0:4000 0.0.0.0:5000\"",
+    "test": "yarn workspaces run test"
   }
 }

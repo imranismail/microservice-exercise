@@ -46,6 +46,7 @@ test("create and wait for delivery job", async t => {
   const createdOrder = await t.context.client.create(order);
 
   t.truthy(createdOrder.id);
+
   t.is(createdOrder.status, "created");
 
   await new Promise(resolve => setTimeout(resolve, 10000));
@@ -61,6 +62,7 @@ test("create, pay and wait for delivery job", async t => {
   const createdOrder = await t.context.client.create(order);
 
   t.truthy(createdOrder.id);
+
   t.is(createdOrder.status, "created");
 
   const paidOrder = await t.context.client.pay({
@@ -81,24 +83,31 @@ test("create, pay and wait for delivery job", async t => {
   t.is(deliveredOrder.status, "delivered");
 });
 
-test("create, pay (failure) and wait for delivery job", async t => {
+test("create, pay (failure)", async t => {
   const order = buildOrder();
 
   const createdOrder = await t.context.client.create(order);
 
   t.truthy(createdOrder.id);
+
   t.is(createdOrder.status, "created");
 
-  const paidOrder = await t.context.client.pay({
-    order_id: createdOrder.id,
-    option: {
-      provider: "visa",
-      challenge: "124",
-      id: "4111111111111111"
+  t.throwsAsync(
+    async () => {
+      await t.context.client.pay({
+        order_id: createdOrder.id,
+        option: {
+          provider: "visa",
+          challenge: "124",
+          id: "4111111111111111"
+        }
+      });
+    },
+    {
+      instanceOf: Error,
+      message: /payment option declined/
     }
-  });
-
-  t.is(paidOrder.status, "void");
+  );
 
   await new Promise(resolve => setTimeout(resolve, 10000));
 
