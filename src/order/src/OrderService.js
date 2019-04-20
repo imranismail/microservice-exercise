@@ -18,6 +18,7 @@ class OrderService {
   create(order) {
     order.id = uuid();
     order.status = "created";
+    order.deliveryJob = setTimeout(() => this._deliverOrder(order.id), 5000);
 
     this.orders.set(order.id, order);
 
@@ -55,6 +56,7 @@ class OrderService {
 
     this._assertCancellable(order.status);
 
+    order.deliveryJob = clearTimeout(order.deliveryJob);
     order.status = "cancelled";
 
     return order;
@@ -65,13 +67,27 @@ class OrderService {
     return this.orders.get(order.id);
   }
 
+  _deliverOrder(id) {
+    if (!this.orders.has(id)) return;
+
+    const order = this.orders.get(id);
+
+    if (order.status === "created") {
+      order.status = "void";
+    }
+
+    if (order.status === "confirmed") {
+      order.status = "delivered";
+    }
+  }
+
   _assertOrderExist(id) {
     if (!this.orders.has(id))
       throw new Error(`couldn't find order with ID: ${id}`);
   }
 
   _assertCancellable(status) {
-    if (status !== "success")
+    if (status !== "confirmed")
       throw new Error(`non cancellable order with status: ${status}`);
   }
 

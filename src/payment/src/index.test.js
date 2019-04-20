@@ -55,15 +55,9 @@ test("create payment with invalid challenge", async t => {
 
   payment.option.challenge = "124";
 
-  await t.throwsAsync(
-    async () => {
-      await t.context.client.create(payment);
-    },
-    {
-      instanceOf: Error,
-      message: /invalid challenge code/
-    }
-  );
+  const paidPayment = await t.context.client.create(payment);
+
+  t.is(paidPayment.status, "declined");
 });
 
 test("get payment", async t => {

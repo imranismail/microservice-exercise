@@ -40,7 +40,22 @@ function buildOrder() {
   };
 }
 
-test("create and pay order", async t => {
+test("create and wait for 5 secs", async t => {
+  const order = buildOrder();
+
+  const createdOrder = await t.context.client.create(order);
+
+  t.truthy(createdOrder.id);
+  t.is(createdOrder.status, "created");
+
+  await new Promise(resolve => setTimeout(resolve, 5000));
+
+  const voidOrder = await t.context.client.get(createdOrder);
+
+  t.is(voidOrder.status, "void");
+});
+
+test("create, pay and wait for 5 secs", async t => {
   const order = buildOrder();
 
   const createdOrder = await t.context.client.create(order);
@@ -57,5 +72,59 @@ test("create and pay order", async t => {
     }
   });
 
-  t.assert(["confirmed", "void"].includes(paidOrder.status));
+  t.is(paidOrder.status, "confirmed");
+
+  await new Promise(resolve => setTimeout(resolve, 5000));
+
+  const deliveredOrder = await t.context.client.get(createdOrder);
+
+  t.is(deliveredOrder.status, "delivered");
+});
+
+test("create, pay (failure) and wait for 5 secs", async t => {
+  const order = buildOrder();
+
+  const createdOrder = await t.context.client.create(order);
+
+  t.truthy(createdOrder.id);
+  t.is(createdOrder.status, "created");
+
+  const paidOrder = await t.context.client.pay({
+    orderId: createdOrder.id,
+    option: {
+      provider: "visa",
+      challenge: "124",
+      identity: "4111111111111111"
+    }
+  });
+
+  t.is(paidOrder.status, "void");
+
+  await new Promise(resolve => setTimeout(resolve, 5000));
+
+  const deliveredOrder = await t.context.client.get(createdOrder);
+
+  t.is(deliveredOrder.status, "void");
+});
+
+test("create, pay then cancel", async t => {
+  const order = buildOrder();
+
+  const createdOrder = await t.context.client.create(order);
+
+  t.truthy(createdOrder.id);
+  t.is(createdOrder.status, "created");
+
+  const paidOrder = await t.context.client.pay({
+    orderId: createdOrder.id,
+    option: {
+      provider: "visa",
+      challenge: "123",
+      identity: "4111111111111111"
+    }
+  });
+
+  const canceledOrder = await t.context.client.cancel(paidOrder);
+
+  t.is(canceledOrder.status, "cancelled");
 });
